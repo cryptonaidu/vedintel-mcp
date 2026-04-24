@@ -32,7 +32,7 @@
   "homepage": "https://vedintelastroapi.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cryptonaidu/vedintel-mcp"
+    "url": "git+https://github.com/cryptonaidu/vedintel-mcp.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4"
