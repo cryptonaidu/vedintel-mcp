@@ -1,0 +1,47 @@
+{
+  "name": "vedintel-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for VedIntel™ AstroAPI — live Vedic astrology computations for Claude Desktop, Cursor, and VS Code",
+  "type": "module",
+  "bin": {
+    "vedintel-mcp": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node build/index.js",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "keywords": [
+    "mcp",
+    "vedic-astrology",
+    "astrology",
+    "kundali",
+    "birth-chart",
+    "panchang",
+    "dasha",
+    "claude",
+    "ai"
+  ],
+  "author": "VedIntel™ AstroAPI",
+  "license": "MIT",
+  "homepage": "https://vedintelastroapi.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cryptonaidu/vedintel-mcp"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
