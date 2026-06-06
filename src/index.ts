@@ -8,7 +8,7 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js'
 
-const BASE_URL = process.env.VEDINTEL_BASE_URL ?? 'https://api.vedintelastroapi.com/api/v1'
+const BASE_URL = process.env.VEDINTEL_BASE_URL ?? 'https://vedintelastroapi.com/api/v1'
 const API_KEY = process.env.VEDINTEL_API_KEY ?? ''
 
 if (!API_KEY) {

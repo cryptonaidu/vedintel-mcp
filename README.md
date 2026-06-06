@@ -141,7 +141,7 @@ Expected: Sagittarius Ascendant · Sun in Virgo · Moon in Aries · 0.0000° dev
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `VEDINTEL_API_KEY` | Your VedIntel™ AstroAPI key | *(required)* |
-| `VEDINTEL_BASE_URL` | Override API base URL | `https://api.vedintelastroapi.com/api/v1` |
+| `VEDINTEL_BASE_URL` | Override API base URL | `https://vedintelastroapi.com/api/v1` |
 
 ## How it differs from VedicAstroAPI's MCP server
 
