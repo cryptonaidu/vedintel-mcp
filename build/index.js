@@ -2,7 +2,7 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ErrorCode, ListToolsRequestSchema, McpError, } from '@modelcontextprotocol/sdk/types.js';
-const BASE_URL = process.env.VEDINTEL_BASE_URL ?? 'https://api.vedintelastroapi.com/api/v1';
+const BASE_URL = process.env.VEDINTEL_BASE_URL ?? 'https://vedintelastroapi.com/api/v1';
 const API_KEY = process.env.VEDINTEL_API_KEY ?? '';
 if (!API_KEY) {
     process.stderr.write('Warning: VEDINTEL_API_KEY is not set. Get a free key at https://vedintelastroapi.com/auth/signup\n');
