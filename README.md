@@ -57,7 +57,7 @@ Sign up at [vedintelastroapi.com/auth/signup](https://vedintelastroapi.com/auth/
 **Option A — npx (recommended, no install needed):**
 
 ```bash
-npx vedintel-mcp
+npx @vedintelastroapi/mcp-server
 ```
 
 **Option B — clone and build:**
@@ -80,7 +80,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "vedintel-astroapi": {
       "command": "npx",
-      "args": ["vedintel-mcp"],
+      "args": ["@vedintelastroapi/mcp-server"],
       "env": {
         "VEDINTEL_API_KEY": "vai_your_key_here"
       }
@@ -99,7 +99,7 @@ Add to your MCP settings:
     "servers": {
       "vedintel-astroapi": {
         "command": "npx",
-        "args": ["vedintel-mcp"],
+        "args": ["@vedintelastroapi/mcp-server"],
         "env": {
           "VEDINTEL_API_KEY": "vai_your_key_here"
         }
