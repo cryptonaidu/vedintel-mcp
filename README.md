@@ -43,7 +43,7 @@ VedicAstroAPI's MCP server is documentation-only — it helps you find endpoints
 | `interpret_chart_ai` | 700+ word Claude AI chart reading *(AI add-on)* |
 | `get_dasha_narrative_ai` | AI Dasha period narrative *(AI add-on)* |
 | `lookup_city_coordinates` | City → lat/lon/timezone lookup |
-| `list_endpoints` | Browse all 106+ VedIntel™ AstroAPI endpoints |
+| `list_endpoints` | Browse all 128 VedIntel™ AstroAPI endpoints |
 | `search_endpoints` | Search endpoints by keyword |
 
 ## Setup
@@ -150,7 +150,7 @@ Expected: Sagittarius Ascendant · Sun in Virgo · Moon in Aries · 0.0000° dev
 | Live API calls | ✓ Returns real computed data | ✗ Documentation only |
 | Birth chart | ✓ Real Swiss Ephemeris results | ✗ Not available |
 | AI readings | ✓ Claude-powered narratives | ✗ Not available |
-| Tool count | 21 tools | 4 tools |
+| Tool count | 22 tools | 4 tools |
 | Accuracy | 0.0000° verified vs Jagannatha Hora | Not published |
 
 ## Links

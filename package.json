@@ -1,13 +1,13 @@
 {
   "name": "vedintel-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP server for VedIntel™ AstroAPI — live Vedic astrology computations for Claude Desktop, Cursor, and VS Code",
   "type": "module",
   "bin": {
-    "vedintel-mcp": "./build/index.js"
+    "vedintel-mcp": "build/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x build/index.js",
     "dev": "tsc --watch",
     "start": "node build/index.js",
     "prepare": "npm run build"
