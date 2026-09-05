@@ -154,7 +154,7 @@ const ALL_ENDPOINTS = [
     { path: 'utilities/radical-number-details', category: 'Utilities', desc: 'Mulank (radical number) 1–9 detailed profile' },
     { path: 'utilities/nakshatra-vastu-details', category: 'Utilities', desc: 'Vastu direction, colors, and activities for all 27 nakshatras' },
     // AI Endpoints (premium)
-    { path: 'ai/interpret/chart', category: 'AI (Premium)', desc: 'Full Claude AI birth chart reading — 700+ words, fully personalized' },
+    { path: 'ai/interpret/chart', category: 'AI (Premium)', desc: 'Full AI birth chart reading (BYOLLM — your own connected AI provider) — 700+ words, fully personalized' },
     { path: 'ai/transit/forecast', category: 'AI (Premium)', desc: 'AI-powered transit forecast narrative' },
     { path: 'ai/dasha/narrative', category: 'AI (Premium)', desc: 'AI narrative for current Dasha period' },
     { path: 'ai/compatibility', category: 'AI (Premium)', desc: 'AI compatibility report for two birth charts' },
@@ -366,7 +366,7 @@ const TOOLS = [
     },
     {
         name: 'interpret_chart_ai',
-        description: 'Generate a full AI-powered Vedic birth chart reading using Claude (Anthropic). Returns a 700+ word personalized interpretation covering: Ascendant and its nakshatra, Moon sign and emotional nature, Sun sign and life purpose, key planetary placements, prominent yogas, and current Dasha period themes. Requires AI add-on plan.',
+        description: 'Generate a full AI-powered Vedic birth chart reading using your own connected AI provider (BYOLLM — OpenAI or Anthropic, set at vedintelastroapi.com/dashboard/ai-providers). Returns a 700+ word personalized interpretation covering: Ascendant and its nakshatra, Moon sign and emotional nature, Sun sign and life purpose, key planetary placements, prominent yogas, and current Dasha period themes. Requires Developer plan or above, and an AI provider connected.',
         inputSchema: {
             type: 'object',
             properties: BIRTH_PARAMS,
