@@ -78,6 +78,73 @@ function formatResult(result: unknown): string {
   return JSON.stringify(result, null, 2)
 }
 
+// AI Narratives is a POST-only, JSON-body, single-response endpoint (not
+// GET+query params like every other tool here, and not streamed like AI
+// Chats below) — callAPI() above can't be reused for it.
+async function callAPIPostJSON(endpoint: string, body: Record<string, unknown>): Promise<unknown> {
+  const url = `${BASE_URL}/${endpoint}`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ api_key: API_KEY, ...body }),
+  })
+
+  const data = (await res.json().catch(() => null)) as { status?: number; error?: string; text?: string; _audit?: unknown } | null
+  if (!res.ok || !data || data.error) {
+    throw new McpError(ErrorCode.InternalError, data?.error ?? `VedIntel™ AstroAPI returned status ${res.status}`)
+  }
+
+  return data
+}
+
+// AI Chats streams SSE (`data: {"token":"..."}\n\n` chunks, ending with a
+// `data: {"_audit":...}\n\n` event and `data: [DONE]\n\n`) — this collects
+// the full stream into one final { text, _audit } result for an MCP tool
+// call, since MCP tool responses aren't themselves streamed to the client.
+async function callAPIPostSSE(endpoint: string, body: Record<string, unknown>): Promise<{ text: string; _audit?: unknown }> {
+  const url = `${BASE_URL}/${endpoint}`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ api_key: API_KEY, ...body }),
+  })
+
+  if (!res.ok || !res.body) {
+    const body_ = await res.text().catch(() => res.statusText)
+    throw new McpError(ErrorCode.InternalError, `VedIntel™ AstroAPI returned status ${res.status}: ${body_}`)
+  }
+
+  const reader = res.body.getReader()
+  const decoder = new TextDecoder()
+  let text = ''
+  let audit: unknown
+  let buffer = ''
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+    const lines = buffer.split('\n')
+    buffer = lines.pop() ?? ''
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue
+      const payload = line.slice(6)
+      if (payload === '[DONE]') continue
+      let parsed: { token?: string; error?: string; _audit?: unknown }
+      try {
+        parsed = JSON.parse(payload)
+      } catch {
+        continue
+      }
+      if (parsed.error) throw new McpError(ErrorCode.InternalError, parsed.error)
+      if (typeof parsed.token === 'string') text += parsed.token
+      if (parsed._audit) audit = parsed._audit
+    }
+  }
+
+  return { text, _audit: audit }
+}
+
 // ─── All 106+ endpoints for discovery ────────────────────────────────────────
 
 const ALL_ENDPOINTS = [
@@ -421,11 +488,40 @@ const TOOLS = [
   {
     name: 'get_dasha_narrative_ai',
     description:
-      'Get an AI-generated narrative for the current Dasha (planetary period) — what themes, challenges, and opportunities this period brings based on the ruling planet, its placement in the natal chart, and how it interacts with the birth chart. Requires AI add-on plan.',
+      'Get an AI-generated narrative for the current Dasha (planetary period) — what themes, challenges, and opportunities this period brings based on the ruling planet, its placement in the natal chart, and how it interacts with the birth chart. Requires Developer plan or above, and an AI provider connected (BYOLLM).',
     inputSchema: {
       type: 'object' as const,
       properties: BIRTH_PARAMS,
       required: BIRTH_REQUIRED,
+    },
+  },
+  {
+    name: 'run_ai_chat',
+    description:
+      'Send a message to a pre-configured VedIntel™ AI Chat — a reusable, guardrail-scoped AI assistant a customer has already set up on their dashboard at vedintelastroapi.com/dashboard/ai-chats, scoped to specific data categories (e.g. Horoscope, Dashas, Matching). Requires a chat_id from that dashboard — this tool does not create a chat, only runs one that already exists. Uses the customer\'s connected AI provider (BYOLLM). Response includes an _audit block showing exactly what verified VedIntel™ AstroAPI data was used to ground the answer.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        chat_id: { type: 'string' as const, description: 'The AI Chat\'s id, found on its Configure page at vedintelastroapi.com/dashboard/ai-chats' },
+        message: { type: 'string' as const, description: 'The question or message to send to this chat' },
+      },
+      required: ['chat_id', 'message'],
+    },
+  },
+  {
+    name: 'run_ai_narrative',
+    description:
+      'Generate a narrative from a pre-configured VedIntel™ AI Narrative template — a reusable, single-shot narrative generator a customer has already set up on their dashboard at vedintelastroapi.com/dashboard/ai-narratives, pinned to one namespace and one specific connected AI provider. Requires a narrative_id from that dashboard — this tool does not create a template, only runs one that already exists. Pass params to override the template\'s own default params for a specific person (e.g. their own birth data). Returns one generated narrative, not a conversation.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        narrative_id: { type: 'string' as const, description: 'The AI Narrative template\'s id, found on its Configure page at vedintelastroapi.com/dashboard/ai-narratives' },
+        params: {
+          type: 'object' as const,
+          description: 'Key-value params to override the template\'s default params for this specific request (e.g. { "dob": "01/10/1977", "tob": "11:40", "lat": 11, "lon": 77, "tz": 5.5 }). Optional — omit to use the template\'s own defaults.',
+        },
+      },
+      required: ['narrative_id'],
     },
   },
   {
@@ -548,6 +644,20 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_dasha_narrative_ai':
         return { content: [{ type: 'text', text: formatResult(await callAPI('ai/dasha/narrative', p)) }] }
+
+      case 'run_ai_chat': {
+        const chatId = p.chat_id as string
+        const message = p.message as string
+        const result = await callAPIPostSSE(`ai/chats/${chatId}`, { messages: [{ role: 'user', content: message }] })
+        return { content: [{ type: 'text', text: formatResult(result) }] }
+      }
+
+      case 'run_ai_narrative': {
+        const narrativeId = p.narrative_id as string
+        const rawParams = (args as { params?: Record<string, unknown> } | undefined)?.params ?? {}
+        const result = await callAPIPostJSON(`ai/narratives/${narrativeId}`, { params: rawParams })
+        return { content: [{ type: 'text', text: formatResult(result) }] }
+      }
 
       case 'lookup_city_coordinates':
         return { content: [{ type: 'text', text: formatResult(await callAPI('utilities/geo-search', p)) }] }

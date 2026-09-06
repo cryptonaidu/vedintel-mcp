@@ -1,6 +1,6 @@
 {
   "name": "@vedintelastroapi/mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MCP server for VedIntel™ AstroAPI — live Vedic astrology computations for Claude Desktop, Cursor, and VS Code",
   "type": "module",
   "publishConfig": {

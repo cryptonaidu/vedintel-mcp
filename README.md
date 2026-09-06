@@ -19,7 +19,7 @@ VedicAstroAPI's MCP server is documentation-only — it helps you find endpoints
 "What coordinates should I use for Chennai?"
 ```
 
-## 22 Tools
+## 24 Tools
 
 | Tool | What it does |
 |------|-------------|
@@ -42,8 +42,10 @@ VedicAstroAPI's MCP server is documentation-only — it helps you find endpoints
 | `get_numerology` | Full numerology profile |
 | `interpret_chart_ai` | 700+ word AI chart reading, BYOLLM *(Developer plan+)* |
 | `get_dasha_narrative_ai` | AI Dasha period narrative, BYOLLM *(Developer plan+)* |
+| `run_ai_chat` | Send a message to a pre-configured AI Chat from your dashboard *(Developer plan+)* |
+| `run_ai_narrative` | Generate a narrative from a pre-configured AI Narrative template *(Developer plan+)* |
 | `lookup_city_coordinates` | City → lat/lon/timezone lookup |
-| `list_endpoints` | Browse all 128 VedIntel™ AstroAPI endpoints |
+| `list_endpoints` | Browse all 143 VedIntel™ AstroAPI endpoints |
 | `search_endpoints` | Search endpoints by keyword |
 
 ## Setup
@@ -113,6 +115,15 @@ Add to your MCP settings:
 
 Restart Claude Desktop / Cursor. You should see the VedIntel™ AstroAPI tools available.
 
+## AI Chats and AI Narratives — using a pre-configured template
+
+Unlike every other tool here (which is self-contained — just pass birth data), `run_ai_chat` and `run_ai_narrative` call a Chat or Narrative you've **already configured** on your dashboard:
+
+- Create an AI Chat at [vedintelastroapi.com/dashboard/ai-chats](https://vedintelastroapi.com/dashboard/ai-chats), copy its `chat_id` from the Configure page, then ask Claude/Cursor to `run_ai_chat` with that id and a message.
+- Create an AI Narrative template at [vedintelastroapi.com/dashboard/ai-narratives](https://vedintelastroapi.com/dashboard/ai-narratives), copy its `narrative_id`, then ask Claude/Cursor to `run_ai_narrative` with that id and any params to override the template's defaults.
+
+Both tools require a paid plan (Developer and above) and a connected AI provider (BYOLLM — set once at [vedintelastroapi.com/dashboard/ai-providers](https://vedintelastroapi.com/dashboard/ai-providers)).
+
 ## Testing
 
 Try these prompts after setup:
@@ -150,7 +161,7 @@ Expected: Sagittarius Ascendant · Sun in Virgo · Moon in Aries · 0.0000° dev
 | Live API calls | ✓ Returns real computed data | ✗ Documentation only |
 | Birth chart | ✓ Real Swiss Ephemeris results | ✗ Not available |
 | AI readings | ✓ BYOLLM-powered narratives (your own key) | ✗ Not available |
-| Tool count | 22 tools | 4 tools |
+| Tool count | 24 tools | 4 tools |
 | Accuracy | 0.0000° verified vs Jagannatha Hora | Not published |
 
 ## Links
