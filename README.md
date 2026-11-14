@@ -45,7 +45,7 @@ VedicAstroAPI's MCP server is documentation-only — it helps you find endpoints
 | `run_ai_chat` | Send a message to a pre-configured AI Chat from your dashboard *(Developer plan+)* |
 | `run_ai_narrative` | Generate a narrative from a pre-configured AI Narrative template *(Developer plan+)* |
 | `lookup_city_coordinates` | City → lat/lon/timezone lookup |
-| `list_endpoints` | Browse all 143 VedIntel™ AstroAPI endpoints |
+| `list_endpoints` | Browse all 161 VedIntel™ AstroAPI endpoints |
 | `search_endpoints` | Search endpoints by keyword |
 
 ## Setup
